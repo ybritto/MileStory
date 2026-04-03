@@ -8,7 +8,7 @@
 ### Platform
 
 - [x] **PLAT-01**: User can use the application in personal single-user mode without authentication
-- [ ] **PLAT-02**: User can rely on backend-owned domain logic for planning, progress, and dashboard status calculations
+- [x] **PLAT-02**: User can rely on backend-owned domain logic for planning, progress, and dashboard status calculations
 - [ ] **PLAT-03**: User can interact with a web UI that reflects the real Milestory product instead of starter placeholder content
 
 ### Goals
@@ -68,7 +68,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PLAT-01 | Phase 1 | Complete |
-| PLAT-02 | Phase 1 | Pending |
+| PLAT-02 | Phase 1 | Complete |
 | PLAT-03 | Phase 4 | Pending |
 | GOAL-01 | Phase 2 | Pending |
 | GOAL-02 | Phase 2 | Pending |
