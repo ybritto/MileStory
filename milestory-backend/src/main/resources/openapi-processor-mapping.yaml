@@ -3,3 +3,11 @@ openapi-processor-mapping: v17
 options:
   package-name: com.ybritto.milestory.generated
   model-type: record
+
+map:
+  result: org.springframework.http.ResponseEntity
+
+  paths:
+    /response:
+      get:
+        result: org.springframework.http.ResponseEntity

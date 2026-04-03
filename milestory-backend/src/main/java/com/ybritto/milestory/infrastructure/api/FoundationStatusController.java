@@ -8,7 +8,10 @@ import com.ybritto.milestory.generated.model.FoundationStatusResponse;
 import com.ybritto.milestory.generated.model.FoundationStatusResponseDatabase;
 import com.ybritto.milestory.generated.model.FoundationStatusResponseMigration;
 import com.ybritto.milestory.generated.model.FoundationStatusResponseMode;
+
 import java.time.ZoneOffset;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,23 +24,25 @@ public class FoundationStatusController implements FoundationStatusApi {
     }
 
     @Override
-    public FoundationStatusResponse getFoundationStatus() {
+    public ResponseEntity<FoundationStatusResponse> getFoundationStatus() {
         FoundationStatus status = getFoundationStatusUseCase.getStatus();
-        return new FoundationStatusResponse(
-                status.headline(),
-                status.summary(),
-                mapMode(status.mode()),
-                status.apiVersion(),
-                new FoundationStatusResponseDatabase(
-                        status.database().status(),
-                        status.database().name()
-                ),
-                new FoundationStatusResponseMigration(
-                        status.migration().status(),
-                        status.migration().baseline()
-                ),
-                status.generatedAt().atOffset(ZoneOffset.UTC),
-                status.notes().toArray(String[]::new)
+        return ResponseEntity.ok(
+                new FoundationStatusResponse(
+                        status.headline(),
+                        status.summary(),
+                        mapMode(status.mode()),
+                        status.apiVersion(),
+                        new FoundationStatusResponseDatabase(
+                                status.database().status(),
+                                status.database().name()
+                        ),
+                        new FoundationStatusResponseMigration(
+                                status.migration().status(),
+                                status.migration().baseline()
+                        ),
+                        status.generatedAt().atOffset(ZoneOffset.UTC),
+                        status.notes().toArray(String[]::new)
+                )
         );
     }
 
