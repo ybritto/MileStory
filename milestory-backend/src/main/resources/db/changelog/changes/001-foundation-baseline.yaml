@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-foundation-baseline
+      author: codex
+      changes:
+        - createTable:
+            tableName: app_metadata
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: schema_version
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: runtime_mode
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: app_metadata
+            columns:
+              - column:
+                  name: id
+                  value: "00000000-0000-0000-0000-000000000001"
+              - column:
+                  name: schema_version
+                  value: "001-foundation-baseline"
+              - column:
+                  name: runtime_mode
+                  value: "personal"
+              - column:
+                  name: created_at
+                  valueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP

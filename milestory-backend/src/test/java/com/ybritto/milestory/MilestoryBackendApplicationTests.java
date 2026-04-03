@@ -1,13 +1,14 @@
 package com.ybritto.milestory;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
 class MilestoryBackendApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void foundationResourcesExist() {
+		assertNotNull(getClass().getResource("/db/changelog/db.changelog-master.yaml"));
+		assertNotNull(getClass().getResource("/db/changelog/changes/001-foundation-baseline.yaml"));
 	}
 
 }
