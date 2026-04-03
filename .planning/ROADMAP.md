@@ -1,110 +1,77 @@
 # Roadmap: Milestory
 
-## Overview
+**Created:** 2026-04-03
+**Phases:** 4
+**v1 requirements:** 18
+**Mapped requirements:** 18
+**Unmapped requirements:** 0
 
-Milestory will be built from the inside out: first a strong domain backbone for measurable goals, then checkpoint planning, then progress tracking, then a motivating dashboard experience, and finally the email-first authentication layer that personalizes and protects the product. This sequencing preserves the backend-first architecture and lets the team validate the core value loop before identity work becomes the final gate to release.
+## Roadmap Summary
 
-## Phases
-
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
-
-Decimal phases appear between their surrounding integers in numeric order.
-
-- [ ] **Phase 1: Domain Foundation** - Establish the measurable goal model and backend-owned planning rules.
-- [ ] **Phase 2: Goal Setup and Checkpoints** - Deliver goal creation and editable checkpoint suggestion flows.
-- [ ] **Phase 3: Progress Tracking Engine** - Support progress logging and backend status evaluation.
-- [ ] **Phase 4: Dashboard and Motivation** - Deliver the landing dashboard, goal insights, and accomplishment tiers.
-- [ ] **Phase 5: Email-First Identity** - Add authentication, authorization, and the email-driven entry flow.
+| Phase | Name | Goal | Requirements |
+|-------|------|------|--------------|
+| 1 | Foundation And Personal Mode | Turn the scaffold into a real backend-driven personal app foundation with migrations, domain boundaries, and auth-free access mode | PLAT-01, PLAT-02 |
+| 2 | Goal Planning And Checkpoints | Let the user define yearly goals and manage editable checkpoint plans across different goal categories | GOAL-01, GOAL-02, GOAL-03, GOAL-04, PLAN-01, PLAN-02, PLAN-03 |
+| 3 | Progress Engine And Status | Let the user record progress and understand plan-versus-actual status using backend-owned calculations | PROG-01, PROG-02, PROG-03, PROG-04 |
+| 4 | Dashboard And Motivational UX | Deliver the first polished Milestory experience with dashboard summaries, attention cues, accomplishment bands, and goal drill-downs | PLAT-03, DASH-01, DASH-02, DASH-03, DASH-04 |
 
 ## Phase Details
 
-### Phase 1: Domain Foundation
-**Goal**: Establish the backend contract, domain model, and architectural seams required for measurable yearly goals and future user ownership.
-**Depends on**: Nothing (first phase)
-**Requirements**: GOAL-01, GOAL-03
-**Success Criteria** (what must be TRUE):
-  1. Backend APIs and domain objects can represent measurable goals across multiple categories.
-  2. Goal definitions include the data needed for future checkpoint generation and progress tracking.
-  3. Ownership and security seams are prepared so authentication can be added later without rewriting the domain.
-**Plans**: 3 plans
+### Phase 1: Foundation And Personal Mode
 
-Plans:
-- [ ] 01-01: Define backend goal domain, validation rules, and OpenAPI contracts.
-- [ ] 01-02: Establish persistence, mapping, and service boundaries for goal categories and measurements.
-- [ ] 01-03: Create frontend app shell and API integration seams for the upcoming goal setup flow.
+**Goal:** Replace scaffold gaps with a real application skeleton that supports personal auth-free use, backend-owned domain logic, and future DDD/hexagonal growth.
 
-### Phase 2: Goal Setup and Checkpoints
-**Goal**: Let a user create and edit goals with automatically suggested but editable checkpoints.
-**Depends on**: Phase 1
-**Requirements**: GOAL-02, PLAN-01, PLAN-02
-**Success Criteria** (what must be TRUE):
-  1. User can create a goal with measurable settings through the UI.
-  2. Newly created goals receive backend-generated checkpoint suggestions.
-  3. User can edit checkpoint suggestions and save the resulting plan.
-**Plans**: 3 plans
+**Requirements:** PLAT-01, PLAT-02
 
-Plans:
-- [ ] 02-01: Implement checkpoint generation and editing rules in backend services.
-- [ ] 02-02: Build the goal setup flow and checkpoint editor in Angular.
-- [ ] 02-03: Add integration and UI tests for goal setup and checkpoint editing.
+**Success criteria:**
+1. Backend package structure clearly separates domain, application, and infrastructure concerns
+2. Liquibase migrations exist and the application can boot against the configured database baseline
+3. API contract and frontend client generation flow still work after foundation cleanup
+4. The application can run in a personal mode without sign-in while preserving a path to future auth
 
-### Phase 3: Progress Tracking Engine
-**Goal**: Enable progress logging and convert raw updates into trustworthy status signals.
-**Depends on**: Phase 2
-**Requirements**: TRAK-01, TRAK-02
-**Success Criteria** (what must be TRUE):
-  1. User can record progress updates against a goal.
-  2. Backend evaluates current progress versus the plan and returns below-plan, on-track, or above-plan status.
-  3. Progress history can drive later dashboard visualizations without recalculating business logic in the frontend.
-**Plans**: 3 plans
+### Phase 2: Goal Planning And Checkpoints
 
-Plans:
-- [ ] 03-01: Implement progress-entry APIs, persistence, and cumulative evaluation logic.
-- [ ] 03-02: Build the progress logging flow in Angular.
-- [ ] 03-03: Verify status calculations across representative goal categories and edge cases.
+**Goal:** Enable creation and maintenance of yearly goals with editable, backend-suggested checkpoints.
 
-### Phase 4: Dashboard and Motivation
-**Goal**: Deliver a polished dashboard that explains yearly momentum and reinforces positive progress through accomplishment tiers.
-**Depends on**: Phase 3
-**Requirements**: DASH-01, DASH-02, MOTV-01, MOTV-02
-**Success Criteria** (what must be TRUE):
-  1. User can land on a dashboard that summarizes all active goals.
-  2. Each goal view clearly shows current progress, next checkpoint, and trend.
-  3. Accomplishment tiers such as 80%, 100%, and 120% are visible and meaningful.
-  4. The UI experience feels motivating rather than purely administrative.
-**Plans**: 3 plans
+**Requirements:** GOAL-01, GOAL-02, GOAL-03, GOAL-04, PLAN-01, PLAN-02, PLAN-03
 
-Plans:
-- [ ] 04-01: Build backend dashboard read models and motivational tier calculations.
-- [ ] 04-02: Implement the dashboard and goal detail experience with the chosen component library.
-- [ ] 04-03: Refine UX, accessibility, and visual language for the dashboard journey.
+**Success criteria:**
+1. User can create, edit, and archive yearly goals through the product UI
+2. Goal model supports multiple categories without forking the entire workflow per category
+3. Backend generates sensible checkpoint suggestions for a yearly goal
+4. User can review and adjust checkpoints before committing the plan
 
-### Phase 5: Email-First Identity
-**Goal**: Add authentication and authorization without compromising the established domain model or dashboard flow.
-**Depends on**: Phase 4
-**Requirements**: AUTH-01, AUTH-02, AUTH-03
-**Success Criteria** (what must be TRUE):
-  1. User enters an email first and is directed to the correct sign-up or login flow.
-  2. User can authenticate with email and password and receive JWT-backed access to the app.
-  3. Goal, checkpoint, progress, and dashboard data are isolated to the authenticated user.
-**Plans**: 3 plans
+### Phase 3: Progress Engine And Status
 
-Plans:
-- [ ] 05-01: Implement account lookup, registration, login, and JWT security backend flows.
-- [ ] 05-02: Build the email-first entry, sign-up, and login screens in Angular.
-- [ ] 05-03: Add authorization coverage and end-to-end verification for personalized data access.
+**Goal:** Build the tracking core that compares actual progress to the yearly plan and explains status clearly.
 
-## Progress
+**Requirements:** PROG-01, PROG-02, PROG-03, PROG-04
 
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+**Success criteria:**
+1. User can record dated progress entries for an existing goal
+2. Backend can aggregate recorded progress into a current cumulative state
+3. Each goal exposes an understandable under-plan, on-track, or above-plan status
+4. Goal detail explains current status in relation to expected checkpoints
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Domain Foundation | 0/3 | Not started | - |
-| 2. Goal Setup and Checkpoints | 0/3 | Not started | - |
-| 3. Progress Tracking Engine | 0/3 | Not started | - |
-| 4. Dashboard and Motivation | 0/3 | Not started | - |
-| 5. Email-First Identity | 0/3 | Not started | - |
+### Phase 4: Dashboard And Motivational UX
+
+**Goal:** Turn the working tracking core into a motivating, polished Milestory experience centered on a strong dashboard.
+
+**Requirements:** PLAT-03, DASH-01, DASH-02, DASH-03, DASH-04
+
+**Success criteria:**
+1. The starter Angular placeholder is fully replaced by Milestory-specific product screens
+2. Dashboard summarizes current goal health and highlights where attention is needed
+3. Dashboard and detail views show accomplishment bands such as 80%, 100%, and 120%
+4. User can move from summary views into individual goal detail without confusion
+
+## Phase Ordering Rationale
+
+Phase 1 addresses current scaffold risks before feature growth. Phase 2 defines the plan model that every later screen depends on. Phase 3 establishes trustworthy calculations before dashboard polish. Phase 4 turns the underlying engine into the motivating UX that delivers the actual product value.
+
+## Coverage Check
+
+All v1 requirements map to exactly one phase.
+
+---
+*Last updated: 2026-04-03 after initial roadmap creation*
