@@ -53,11 +53,19 @@ public class SystemFoundationStatusService implements FoundationRuntimeStatusPro
     }
 
     private String determineDatabaseName() {
+        try {
+            String currentDatabase = jdbcTemplate.queryForObject("select current_database()", String.class);
+            if (currentDatabase != null && !currentDatabase.isBlank()) {
+                return currentDatabase;
+            }
+        } catch (RuntimeException ex) {
+            // Fall through to configuration parsing when the database is not reachable yet.
+        }
+
         String url = environment.getProperty("spring.datasource.url");
         if (url == null || url.isBlank() || !url.contains("/")) {
             return "unknown";
         }
-
         String withoutParams = url.substring(url.lastIndexOf('/') + 1);
         int querySeparator = withoutParams.indexOf('?');
         if (querySeparator >= 0) {
