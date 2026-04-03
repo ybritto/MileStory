@@ -1,0 +1,96 @@
+FoundationStatusResponse:
+  type: object
+  required:
+    - headline
+    - summary
+    - mode
+    - apiVersion
+    - database
+    - migration
+    - generatedAt
+    - notes
+  properties:
+    headline:
+      type: string
+      example: Milestory foundation is ready
+    summary:
+      type: string
+      example: The Phase 1 stack is up, auth-free, and ready for personal goal tracking work.
+    mode:
+      type: string
+      enum:
+        - ready
+        - empty
+        - degraded
+      example: ready
+    apiVersion:
+      type: string
+      example: v1
+    database:
+      type: object
+      required:
+        - status
+        - name
+      properties:
+        status:
+          type: string
+          example: connected
+        name:
+          type: string
+          example: milestory
+    migration:
+      type: object
+      required:
+        - status
+        - baseline
+      properties:
+        status:
+          type: string
+          example: baseline-pending
+        baseline:
+          type: string
+          example: 001-foundation-baseline
+    generatedAt:
+      type: string
+      format: date-time
+      example: '2026-04-04T10:00:00Z'
+    notes:
+      type: array
+      items:
+        type: string
+      example:
+        - Authentication is intentionally deferred in Phase 1.
+        - Goal planning flows arrive in later phases.
+
+FoundationStatusUnavailableResponse:
+  type: object
+  required:
+    - headline
+    - summary
+    - mode
+    - generatedAt
+    - notes
+  properties:
+    headline:
+      type: string
+      example: Milestory foundation is degraded
+    summary:
+      type: string
+      example: Some foundation checks are not yet healthy.
+    mode:
+      type: string
+      enum:
+        - ready
+        - empty
+        - degraded
+      example: degraded
+    generatedAt:
+      type: string
+      format: date-time
+      example: '2026-04-04T10:00:00Z'
+    notes:
+      type: array
+      items:
+        type: string
+      example:
+        - Database connectivity or migration status is currently unavailable.

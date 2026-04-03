@@ -8,17 +8,6 @@ servers:
   - url: http://localhost:8080
     description: URL for local development
 
-security:
-  - bearerAuth: []
-
 paths:
-  /api/v1/hello:
-    $ref: './paths/hello.yaml'
-
-
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+  /api/v1/status:
+    $ref: './paths/status.yaml'

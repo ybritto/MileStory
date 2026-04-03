@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Foundation Status
+  operationId: getFoundationStatus
+  summary: Get foundation status
+  description: Returns the current foundation status for the Phase 1 Milestory home screen.
+  responses:
+    '200':
+      description: Foundation status is available.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/status.yaml#/FoundationStatusResponse'
+    '503':
+      description: Foundation status is temporarily unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/status.yaml#/FoundationStatusUnavailableResponse'
