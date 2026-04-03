@@ -12,17 +12,17 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.ybritto.template</groupId>
-    <artifactId>template-app</artifactId>
+    <groupId>com.ybritto.milestory</groupId>
+    <artifactId>milestory-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Template</name>
+    <name>Milestory Application</name>
     <description />
 
     <modules>
-        <module>template-api</module>
-        <module>template-backend</module>
-        <module>template-frontend</module>
+        <module>milestory-api</module>
+        <module>milestory-backend</module>
+        <module>milestory-frontend</module>
     </modules>
 
     <properties>
