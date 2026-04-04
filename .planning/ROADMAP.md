@@ -45,7 +45,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Define the goal-planning contract and backend foundation for categories, previews, and checkpoints
+- [x] 02-01-PLAN.md — Define the goal-planning contract and backend foundation for categories, previews, and checkpoints
 - [ ] 02-02-PLAN.md — Implement the backend goal slice for create, detail, edit, archive, and restore behavior
 - [ ] 02-03-PLAN.md — Ship the guided Angular goal planning, detail, and archive flow
 
@@ -88,4 +88,4 @@ Phase 1 addresses current scaffold risks before feature growth. Phase 2 defines 
 All v1 requirements map to exactly one phase.
 
 ---
-*Last updated: 2026-04-03 after initial roadmap creation*
+*Last updated: 2026-04-04 after completing 02-01*
