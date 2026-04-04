@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 02
 status: in_progress
-stopped_at: Completed `02-01-PLAN.md`
-last_updated: "2026-04-04T08:29:39.896Z"
+stopped_at: Completed `02-02-PLAN.md`
+last_updated: "2026-04-04T08:48:49.105Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # STATE.md
@@ -43,9 +43,9 @@ See: `.planning/PROJECT.md` (updated 2026-04-03)
 ## Current Execution
 
 - **Current phase:** 02
-- **Completed plans:** `01-01`, `01-02`, `01-03`, `02-01`
-- **Next plan:** `02-02`
-- **Plan progress:** `1 / 3` (`33%`)
+- **Completed plans:** `01-01`, `01-02`, `01-03`, `02-01`, `02-02`
+- **Next plan:** `02-03`
+- **Plan progress:** `2 / 3` (`67%`)
 
 ## Decisions
 
@@ -58,6 +58,9 @@ See: `.planning/PROJECT.md` (updated 2026-04-03)
 - Reserve dedicated archive and restore endpoints early so the goal lifecycle is contract-backed before controller implementation.
 - Keep checkpoint previews cumulative and evenly paced across the planning year so every category shares one backend-owned planning model.
 - Surface `GENERIC_FALLBACK` explicitly when category-specific planning logic is absent so later UX can explain that the user should refine the plan.
+- Keep generated OpenAPI models at the controller boundary and translate them into application commands through MapStruct.
+- Enforce archived goals as read-only backend state, with explicit `KEEP_EXISTING` and `REGENERATE` restore semantics.
+- Preserve `BigDecimal` scale through the goal model so equality-based tests and serialized payloads stay stable.
 
 ## Performance Metrics
 
@@ -66,11 +69,12 @@ See: `.planning/PROJECT.md` (updated 2026-04-03)
 | 01-foundation-and-personal-mode | 02 | 13 min | 2 | 15 |
 | 01-foundation-and-personal-mode | 03 | 8 min | 2 | 13 |
 | Phase 02 P01 | 39 min | 2 tasks | 16 files |
+| Phase 02 P02 | 17 min | 2 tasks | 42 files |
 
 ## Session
 
-- **Stopped at:** Completed `02-01-PLAN.md`
-- **Last summary:** `.planning/phases/02-goal-planning-and-checkpoints/02-01-SUMMARY.md`
+- **Stopped at:** Completed `02-02-PLAN.md`
+- **Last summary:** `.planning/phases/02-goal-planning-and-checkpoints/02-02-SUMMARY.md`
 
 ## Notes
 
@@ -79,4 +83,4 @@ See: `.planning/PROJECT.md` (updated 2026-04-03)
 - Template leftovers remain in some docs and metadata and should stay visible during implementation decisions
 
 ---
-*Last updated: 2026-04-04 after Phase 02 Plan 01 completion*
+*Last updated: 2026-04-04 after Phase 02 Plan 02 completion*

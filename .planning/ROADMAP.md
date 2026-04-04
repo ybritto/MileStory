@@ -46,7 +46,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Define the goal-planning contract and backend foundation for categories, previews, and checkpoints
-- [ ] 02-02-PLAN.md — Implement the backend goal slice for create, detail, edit, archive, and restore behavior
+- [x] 02-02-PLAN.md — Implement the backend goal slice for create, detail, edit, archive, and restore behavior
 - [ ] 02-03-PLAN.md — Ship the guided Angular goal planning, detail, and archive flow
 
 **Success criteria:**
@@ -88,4 +88,4 @@ Phase 1 addresses current scaffold risks before feature growth. Phase 2 defines 
 All v1 requirements map to exactly one phase.
 
 ---
-*Last updated: 2026-04-04 after completing 02-01*
+*Last updated: 2026-04-04 after completing 02-02*
