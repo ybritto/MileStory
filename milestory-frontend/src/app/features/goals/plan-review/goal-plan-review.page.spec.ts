@@ -102,6 +102,8 @@ function createPreview(customized: boolean): PreviewGoalPlan200Response {
         targetValue: 2,
         note: 'Start with a manageable pace.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Expected by now',
+        progressContextDetail: 'You planned to reach 2 books by this point.',
       },
       {
         checkpointId: 'checkpoint-2',
@@ -110,6 +112,8 @@ function createPreview(customized: boolean): PreviewGoalPlan200Response {
         targetValue: 4,
         note: 'Hold steady through February.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Upcoming checkpoint',
+        progressContextDetail: 'The next target is 4 books by February 28.',
       },
     ],
   };

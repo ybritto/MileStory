@@ -9,8 +9,10 @@ import { ArchiveGoal200Response } from '../../../../api/model/archiveGoal200Resp
 import { CreateGoalCategoryRequest } from '../../../../api/model/createGoalCategoryRequest';
 import { CreateGoalRequest } from '../../../../api/model/createGoalRequest';
 import { ListGoalCategories200ResponseInner } from '../../../../api/model/listGoalCategories200ResponseInner';
+import { ListGoals200ResponseInnerProgressEntriesInner } from '../../../../api/model/listGoals200ResponseInnerProgressEntriesInner';
 import { ListGoals200ResponseInner } from '../../../../api/model/listGoals200ResponseInner';
 import { PreviewGoalPlan200Response } from '../../../../api/model/previewGoalPlan200Response';
+import { RecordGoalProgressEntryRequest } from '../../../../api/model/recordGoalProgressEntryRequest';
 import { RestoreGoalRequest } from '../../../../api/model/restoreGoalRequest';
 import { UpdateGoalRequest } from '../../../../api/model/updateGoalRequest';
 import {
@@ -33,6 +35,7 @@ describe('GoalPlanningStore', () => {
     listGoals: ReturnType<typeof vi.fn>;
     archiveGoal: ReturnType<typeof vi.fn>;
     restoreGoal: ReturnType<typeof vi.fn>;
+    recordGoalProgressEntry: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -50,6 +53,7 @@ describe('GoalPlanningStore', () => {
       listGoals: vi.fn(),
       archiveGoal: vi.fn(),
       restoreGoal: vi.fn(),
+      recordGoalProgressEntry: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -178,6 +182,69 @@ describe('GoalPlanningStore', () => {
     });
     expect(store.goals()).toEqual([]);
   });
+
+  it('records a progress update, reloads the goal detail, and exposes the normal success message', () => {
+    const refreshedGoal = createGoal({
+      progressEntries: [createProgressEntry()],
+    });
+    const request: RecordGoalProgressEntryRequest = {
+      entryDate: '2026-04-04',
+      progressValue: 9,
+      note: 'Finished another chapter.',
+    };
+
+    goalsService.recordGoalProgressEntry.mockReturnValue(of(createProgressEntry()));
+    goalsService.getGoal.mockReturnValue(of(refreshedGoal));
+
+    const store = TestBed.inject(GoalPlanningStore);
+
+    store.recordProgress('goal-id', request).subscribe((entry: ListGoals200ResponseInnerProgressEntriesInner) => {
+      expect(entry).toEqual(createProgressEntry());
+    });
+
+    expect(goalsService.recordGoalProgressEntry).toHaveBeenCalledWith('goal-id', request);
+    expect(goalsService.getGoal).toHaveBeenCalledWith('goal-id');
+    expect(store.goal()).toEqual(refreshedGoal);
+    expect(store.successMessage()).toBe('Progress updated. Your status has been refreshed.');
+  });
+
+  it('uses the correction success message when the backend marks the update as a correction', () => {
+    goalsService.recordGoalProgressEntry.mockReturnValue(
+      of(
+        createProgressEntry({
+          entryType: ListGoals200ResponseInnerProgressEntriesInner.EntryTypeEnum.Correction,
+        }),
+      ),
+    );
+    goalsService.getGoal.mockReturnValue(of(createGoal()));
+
+    const store = TestBed.inject(GoalPlanningStore);
+
+    store
+      .recordProgress('goal-id', {
+        entryDate: '2026-04-04',
+        progressValue: 7,
+      })
+      .subscribe();
+
+    expect(store.successMessage()).toBe('Correction saved. Milestory updated your status from the new total.');
+  });
+
+  it('blocks opening the progress overlay for an archived goal through explicit store state', () => {
+    const store = TestBed.inject(GoalPlanningStore);
+
+    goalsService.getGoal.mockReturnValue(of(createGoal({ status: 'ARCHIVED' })));
+    store.loadGoal('goal-id');
+    store.openProgressOverlay();
+
+    const overlayState = store.progressOverlayState();
+
+    expect(overlayState.kind).toBe('blocked');
+    if (overlayState.kind !== 'blocked') {
+      throw new Error('Expected blocked overlay state for archived goal.');
+    }
+    expect(overlayState.message).toBe('Archived goals no longer accept progress updates.');
+  });
 });
 
 function createCategories(): ListGoalCategories200ResponseInner[] {
@@ -218,6 +285,8 @@ function createPreview(): PreviewGoalPlan200Response {
         targetValue: 15,
         note: 'Start gently.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Expected by now',
+        progressContextDetail: 'You planned to reach 15 sessions by this point.',
       },
     ],
   };
@@ -239,6 +308,13 @@ function createGoal(
     suggestionBasis: 'CATEGORY_AWARE',
     customizedFromSuggestion: false,
     plannedPathSummary: 'Monthly milestones carry the target across the year.',
+    currentProgressValue: 6,
+    progressPercentOfTarget: 25,
+    expectedProgressValueToday: 6,
+    paceStatus: 'ON_PACE',
+    paceSummary: "You're right where this goal expected you to be today.",
+    paceDetail: 'You are matching the planned pace for today.',
+    progressEntries: [],
     checkpoints: [
       {
         checkpointId: 'checkpoint-1',
@@ -247,8 +323,24 @@ function createGoal(
         targetValue: 2,
         note: 'Start gently.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Expected by now',
+        progressContextDetail: 'You planned to reach 2 books by this point.',
       },
     ],
+    ...overrides,
+  };
+}
+
+function createProgressEntry(
+  overrides: Partial<ListGoals200ResponseInnerProgressEntriesInner> = {},
+): ListGoals200ResponseInnerProgressEntriesInner {
+  return {
+    progressEntryId: 'progress-entry-id',
+    entryDate: '2026-04-04',
+    progressValue: 9,
+    note: 'Finished another chapter.',
+    entryType: ListGoals200ResponseInnerProgressEntriesInner.EntryTypeEnum.Normal,
+    recordedAt: '2026-04-04T10:00:00Z',
     ...overrides,
   };
 }

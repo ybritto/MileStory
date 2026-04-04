@@ -111,6 +111,13 @@ function createGoal(): ListGoals200ResponseInner {
     suggestionBasis: 'CATEGORY_AWARE',
     customizedFromSuggestion: true,
     plannedPathSummary: 'Monthly milestones carry the target across the year.',
+    currentProgressValue: 6,
+    progressPercentOfTarget: 25,
+    expectedProgressValueToday: 6,
+    paceStatus: 'ON_PACE',
+    paceSummary: "You're right where this goal expected you to be today.",
+    paceDetail: 'You are matching the planned pace for today.',
+    progressEntries: [],
     checkpoints: [
       {
         checkpointId: 'checkpoint-1',
@@ -119,6 +126,8 @@ function createGoal(): ListGoals200ResponseInner {
         targetValue: 2,
         note: 'Start with a manageable pace.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Expected by now',
+        progressContextDetail: 'You planned to reach 2 books by this point.',
       },
       {
         checkpointId: 'checkpoint-2',
@@ -127,6 +136,8 @@ function createGoal(): ListGoals200ResponseInner {
         targetValue: 4,
         note: 'Hold steady through February.',
         origin: 'SUGGESTED',
+        progressContextLabel: 'Upcoming checkpoint',
+        progressContextDetail: 'The next target is 4 books by February 28.',
       },
     ],
   };

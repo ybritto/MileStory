@@ -8,9 +8,11 @@ import { ArchiveGoal200Response } from '../../../../api/model/archiveGoal200Resp
 import { CreateGoalCategoryRequest } from '../../../../api/model/createGoalCategoryRequest';
 import { CreateGoalRequest } from '../../../../api/model/createGoalRequest';
 import { ListGoalCategories200ResponseInner } from '../../../../api/model/listGoalCategories200ResponseInner';
+import { ListGoals200ResponseInnerProgressEntriesInner } from '../../../../api/model/listGoals200ResponseInnerProgressEntriesInner';
 import { ListGoals200ResponseInner } from '../../../../api/model/listGoals200ResponseInner';
 import { PreviewGoalPlan200Response } from '../../../../api/model/previewGoalPlan200Response';
 import { PreviewGoalPlanRequest } from '../../../../api/model/previewGoalPlanRequest';
+import { RecordGoalProgressEntryRequest } from '../../../../api/model/recordGoalProgressEntryRequest';
 import { RestoreGoalRequest } from '../../../../api/model/restoreGoalRequest';
 import { UpdateGoalRequest } from '../../../../api/model/updateGoalRequest';
 
@@ -32,6 +34,12 @@ export type GoalPlanningViewState =
   | { kind: 'saving' }
   | { kind: 'error'; message: string };
 
+export type ProgressOverlayState =
+  | { kind: 'closed' }
+  | { kind: 'open' }
+  | { kind: 'submitting' }
+  | { kind: 'blocked'; message: string };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -46,6 +54,9 @@ export class GoalPlanningStore {
   private readonly viewStateState = signal<GoalPlanningViewState>({ kind: 'idle' });
   private readonly goalState = signal<ListGoals200ResponseInner | null>(null);
   private readonly goalsState = signal<ListGoals200ResponseInner[]>([]);
+  private readonly progressOverlayStateState = signal<ProgressOverlayState>({ kind: 'closed' });
+  private readonly successMessageState = signal<string | null>(null);
+  private currentGoalId: string | null = null;
 
   readonly goalCategories = this.categoriesState.asReadonly();
   readonly previewPayload = this.previewState.asReadonly();
@@ -53,6 +64,8 @@ export class GoalPlanningStore {
   readonly viewState = this.viewStateState.asReadonly();
   readonly goal = this.goalState.asReadonly();
   readonly goals = this.goalsState.asReadonly();
+  readonly progressOverlayState = this.progressOverlayStateState.asReadonly();
+  readonly successMessage = this.successMessageState.asReadonly();
 
   loadGoalCategories(): void {
     this.goalCategoriesService.listGoalCategories().subscribe({
@@ -120,6 +133,12 @@ export class GoalPlanningStore {
   }
 
   loadGoal(goalId: string): void {
+    if (this.currentGoalId !== goalId) {
+      this.successMessageState.set(null);
+      this.progressOverlayStateState.set({ kind: 'closed' });
+      this.currentGoalId = goalId;
+    }
+
     this.goalsService.getGoal(goalId).subscribe({
       next: (goal) => {
         this.goalState.set(goal);
@@ -134,6 +153,51 @@ export class GoalPlanningStore {
             'Milestory could not load the goal details. Confirm the backend goal API is available, then try again.',
         }),
     });
+  }
+
+  openProgressOverlay(): void {
+    this.successMessageState.set(null);
+
+    if (this.goal()?.status === 'ARCHIVED') {
+      this.progressOverlayStateState.set({
+        kind: 'blocked',
+        message: 'Archived goals no longer accept progress updates.',
+      });
+      return;
+    }
+
+    this.progressOverlayStateState.set({ kind: 'open' });
+  }
+
+  closeProgressOverlay(): void {
+    this.progressOverlayStateState.set({ kind: 'closed' });
+  }
+
+  recordProgress(
+    goalId: string,
+    request: RecordGoalProgressEntryRequest,
+  ): Observable<ListGoals200ResponseInnerProgressEntriesInner> {
+    this.progressOverlayStateState.set({ kind: 'submitting' });
+
+    return this.goalsService.recordGoalProgressEntry(goalId, request).pipe(
+      switchMap((entry) =>
+        this.goalsService.getGoal(goalId).pipe(
+          tap((goal) => {
+            this.goalState.set(goal);
+            this.previewState.set(goalToPreview(goal));
+            this.customizedState.set(goal.customizedFromSuggestion);
+            this.upsertGoal(goal);
+            this.successMessageState.set(getProgressSuccessMessage(entry));
+            this.progressOverlayStateState.set({ kind: 'closed' });
+          }),
+          map(() => entry),
+        ),
+      ),
+      catchError((error: unknown) => {
+        this.progressOverlayStateState.set({ kind: 'open' });
+        return throwError(() => error);
+      }),
+    );
   }
 
   loadGoals(status?: 'ACTIVE' | 'ARCHIVED'): void {
@@ -228,6 +292,12 @@ export class GoalPlanningStore {
       return nextGoals;
     });
   }
+}
+
+function getProgressSuccessMessage(entry: ListGoals200ResponseInnerProgressEntriesInner): string {
+  return entry.entryType === ListGoals200ResponseInnerProgressEntriesInner.EntryTypeEnum.Correction
+    ? 'Correction saved. Milestory updated your status from the new total.'
+    : 'Progress updated. Your status has been refreshed.';
 }
 
 function goalToPreview(goal: ListGoals200ResponseInner): PreviewGoalPlan200Response {
