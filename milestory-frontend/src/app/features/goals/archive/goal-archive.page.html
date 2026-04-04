@@ -1,0 +1,62 @@
+<main class="goal-page goal-page--archive">
+  <section class="goal-shell">
+    <header class="goal-shell__hero">
+      <p class="goal-shell__eyebrow">Archive</p>
+      <h1>Keep the story, not the clutter</h1>
+      <p class="goal-shell__summary">
+        Archived goals stay readable here with low-emphasis restore actions and no edit controls.
+      </p>
+    </header>
+
+    <section class="goal-card archive-intro">
+      <p class="archive-intro__count">{{ archiveCount() }} archived goal(s)</p>
+      <p class="archive-intro__copy">
+        Restoring keeps the plan readable. You can keep the existing checkpoint set or regenerate
+        a fresh monthly path.
+      </p>
+    </section>
+
+    <div class="archive-list">
+      @for (goal of goals(); track goal.goalId) {
+        <article class="archive-card">
+          <div class="archive-card__header">
+            <div>
+              <p class="archive-card__eyebrow">{{ categoryLabel(goal.categoryId) }}</p>
+              <h2>{{ goal.title }}</h2>
+            </div>
+
+            <span class="goal-pill goal-pill--archived">Archived</span>
+          </div>
+
+          <ul class="archive-card__facts">
+            <li>{{ goal.targetValue }} {{ goal.unit }}</li>
+            <li>{{ goal.plannedPathSummary }}</li>
+            <li>{{ goal.notes }}</li>
+          </ul>
+
+          <div class="archive-card__actions">
+            <button
+              type="button"
+              class="archive-button"
+              data-action="keep-existing"
+              (click)="restore(goal.goalId, 'KEEP_EXISTING')"
+            >
+              Keep existing plan
+            </button>
+            <button
+              type="button"
+              class="archive-button archive-button--secondary"
+              data-action="regenerate"
+              (click)="restore(goal.goalId, 'REGENERATE')"
+            >
+              Regenerate plan
+            </button>
+            <button type="button" class="archive-button archive-button--ghost" (click)="viewGoal(goal)">
+              Open detail
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</main>

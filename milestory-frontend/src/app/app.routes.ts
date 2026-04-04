@@ -6,4 +6,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/home/home.page').then((module) => module.HomePage),
   },
+  {
+    path: 'goals',
+    loadChildren: () =>
+      import('./features/goals/goal.routes').then((module) => module.GOAL_ROUTES),
+  },
 ];

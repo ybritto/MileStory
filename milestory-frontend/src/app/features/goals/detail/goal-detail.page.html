@@ -1,0 +1,90 @@
+<main class="goal-page goal-page--detail">
+  @if (goal(); as goal) {
+    <section class="goal-shell">
+      <header class="goal-shell__hero">
+        <p class="goal-shell__eyebrow">Goal detail</p>
+        <h1>{{ goal.title }}</h1>
+        <p class="goal-shell__summary">
+          Saved plan for {{ goal.planningYear }}. The checkpoint path and detail snapshot come
+          straight from the backend.
+        </p>
+      </header>
+
+      <section class="goal-card goal-detail">
+        <div class="goal-detail__header">
+          <div>
+            <p class="goal-summary__eyebrow">Planned path</p>
+            <h2>How the year is shaped</h2>
+          </div>
+
+          <div class="goal-detail__flags">
+            <span class="goal-pill">{{ categoryLabel() }}</span>
+            <span class="goal-pill">{{ goal.targetValue }} {{ goal.unit }}</span>
+            <span class="goal-pill" [class.goal-pill--accent]="goal.customizedFromSuggestion">
+              {{ goal.customizedFromSuggestion ? 'Customized from suggestion' : 'Backend suggestion' }}
+            </span>
+          </div>
+        </div>
+
+        <ul class="goal-detail__facts">
+          <li>{{ goal.motivation }}</li>
+          <li>{{ goal.notes }}</li>
+          <li>{{ goal.plannedPathSummary }}</li>
+          <li>{{ goal.suggestionBasis }}</li>
+        </ul>
+
+        @if (goal.status === 'ARCHIVED') {
+          <p class="goal-detail__archive-note">
+            Archived goals are read-only until they are restored.
+          </p>
+        }
+
+        <div class="goal-detail__actions">
+          @if (goal.status === 'ACTIVE') {
+            <button type="button" class="goal-button goal-button--ghost" (click)="editGoal()">
+              Edit plan
+            </button>
+            <button type="button" class="goal-button goal-button--danger" (click)="archiveGoal()">
+              Archive goal
+            </button>
+          }
+          @else {
+            <a class="goal-button goal-button--ghost" routerLink="/goals/archive">View archive</a>
+          }
+        </div>
+      </section>
+
+      <section class="goal-card goal-detail">
+        <div class="goal-detail__header">
+          <div>
+            <p class="goal-summary__eyebrow">Checkpoints</p>
+            <h2>{{ checkpointCount() }} checkpoint cards</h2>
+          </div>
+        </div>
+
+        <div class="goal-checkpoint-list">
+          @for (checkpoint of checkpointCards(); track checkpoint.checkpointId) {
+            <article class="checkpoint-card">
+              <div class="checkpoint-card__header">
+                <p class="checkpoint-card__label">Checkpoint {{ checkpoint.sequenceNumber }}</p>
+                <span class="goal-pill">{{ checkpoint.origin }}</span>
+              </div>
+              <div class="checkpoint-card__grid">
+                <p>{{ checkpoint.checkpointDate }}</p>
+                <p>{{ checkpoint.targetValue }}</p>
+                <p>{{ checkpoint.note || 'No note added yet.' }}</p>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    </section>
+  } @else {
+    <section class="goal-shell">
+      <header class="goal-shell__hero">
+        <p class="goal-shell__eyebrow">Goal detail</p>
+        <h1>Loading goal</h1>
+      </header>
+    </section>
+  }
+</main>

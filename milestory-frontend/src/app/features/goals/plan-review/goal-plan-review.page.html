@@ -1,0 +1,108 @@
+<main class="goal-page goal-page--review">
+  @if (snapshot(); as snapshot) {
+    <section class="goal-shell">
+      <header class="goal-shell__hero">
+        <p class="goal-shell__eyebrow">Checkpoint review</p>
+        <h1>{{ summaryTitle() }}</h1>
+        <p class="goal-shell__summary">
+          Review and refine your plan before saving. The backend suggestion gives you the path,
+          and the cards let you shape the year.
+        </p>
+      </header>
+
+      <section class="goal-card goal-summary" aria-labelledby="summary-title">
+        <div class="goal-summary__header">
+          <div>
+            <p class="goal-summary__eyebrow">Plan snapshot</p>
+            <h2 id="summary-title">{{ snapshot.title }}</h2>
+          </div>
+
+          <div class="goal-summary__flags">
+            <span class="goal-pill">{{ snapshot.suggestionBasis }}</span>
+            @if (isCustomized()) {
+              <span class="goal-pill goal-pill--accent">Customized from suggestion</span>
+            }
+          </div>
+        </div>
+
+        <ul class="goal-summary__facts">
+          @for (fact of goalSummary(); track fact) {
+            <li>{{ fact }}</li>
+          }
+        </ul>
+
+        @if (isFallbackSuggestion()) {
+          <p class="goal-summary__fallback">
+            A generic plan keeps the path moving, but Milestory expects you to refine it before
+            saving.
+          </p>
+        }
+      </section>
+
+      <form class="goal-card goal-review" [formGroup]="reviewForm" (ngSubmit)="savePlan()">
+        <div class="goal-review__header">
+          <div>
+            <p class="goal-summary__eyebrow">Checkpoint cards</p>
+            <h2>Adjust the year</h2>
+          </div>
+
+          <button type="button" class="goal-button goal-button--ghost" (click)="addCheckpoint()">
+            Add checkpoint
+          </button>
+        </div>
+
+        <div class="goal-checkpoint-list" formArrayName="checkpoints">
+          @for (checkpoint of checkpointEntries(); track trackCheckpoint($index, checkpoint)) {
+            <article class="checkpoint-card" [formGroup]="checkpoint">
+              <div class="checkpoint-card__header">
+                <p class="checkpoint-card__label">{{ checkpointLabel($index) }}</p>
+                <button
+                  type="button"
+                  class="checkpoint-card__remove"
+                  (click)="removeCheckpoint($index)"
+                >
+                  Remove checkpoint
+                </button>
+              </div>
+
+              <div class="checkpoint-card__grid">
+                <label class="goal-field">
+                  <span class="goal-field__label">Checkpoint date</span>
+                  <input type="date" formControlName="checkpointDate" />
+                </label>
+
+                <label class="goal-field">
+                  <span class="goal-field__label">Target value</span>
+                  <input type="number" formControlName="targetValue" min="0" step="1" />
+                </label>
+
+                <label class="goal-field goal-field--wide">
+                  <span class="goal-field__label">Note</span>
+                  <textarea rows="3" formControlName="note" placeholder="Explain the change."></textarea>
+                </label>
+              </div>
+            </article>
+          }
+        </div>
+
+        <div class="goal-review__actions">
+          <p class="goal-review__hint">The plan is editable until you save the goal.</p>
+          <button type="submit" class="goal-button goal-button--primary">
+            {{ isEditing() ? 'Save changes' : 'Save goal' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  } @else {
+    <section class="goal-shell">
+      <header class="goal-shell__hero">
+        <p class="goal-shell__eyebrow">Checkpoint review</p>
+        <h1>Review your plan</h1>
+        <p class="goal-shell__summary">
+          Milestory could not find a preview yet. Start from the draft step to generate one.
+        </p>
+        <a class="goal-button goal-button--primary" routerLink="/goals/new">Back to draft</a>
+      </header>
+    </section>
+  }
+</main>

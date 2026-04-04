@@ -1,0 +1,96 @@
+<main class="goal-page goal-page--create">
+  <section class="goal-shell">
+    <header class="goal-shell__hero">
+      <p class="goal-shell__eyebrow">Goal planning</p>
+      <h1>{{ titleText() }}</h1>
+      <p class="goal-shell__summary">
+        Set the intent first, then let Milestory shape a yearly plan you can review and refine.
+      </p>
+    </header>
+
+    <form class="goal-card goal-form" [formGroup]="form" (ngSubmit)="continue()">
+      <div class="goal-form__grid">
+        <label class="goal-field">
+          <span class="goal-field__label">Goal title</span>
+          <input type="text" formControlName="title" placeholder="Read 24 books" />
+        </label>
+
+        <div class="goal-field">
+          <span class="goal-field__label">Category</span>
+          <div class="goal-category-picker">
+            @for (category of goalCategories(); track category.categoryId) {
+              <button
+                type="button"
+                class="goal-category-picker__card"
+                [class.goal-category-picker__card--selected]="isSelectedCategory(category.categoryId)"
+                (click)="selectCategory(category)"
+              >
+                <span class="goal-category-picker__name">{{ category.displayName }}</span>
+                <span class="goal-category-picker__meta">{{
+                  category.systemDefined ? 'Starter category' : 'Custom category'
+                }}</span>
+              </button>
+            }
+
+            <button
+              type="button"
+              class="goal-category-picker__card goal-category-picker__card--secondary"
+              [class.goal-category-picker__card--selected]="form.controls.categoryMode.value === 'custom'"
+              (click)="selectCustomCategory()"
+            >
+              <span class="goal-category-picker__name">Create custom category</span>
+              <span class="goal-category-picker__meta">Name a category that fits the goal better</span>
+            </button>
+          </div>
+        </div>
+
+        <label class="goal-field goal-field--wide goal-field--subtle">
+          <span class="goal-field__label">Custom category name</span>
+          <input
+            type="text"
+            formControlName="customCategoryName"
+            placeholder="Creative Practice"
+          />
+          <span class="goal-field__hint">
+            Switch to the custom path when the starter categories do not fit.
+          </span>
+        </label>
+
+        <label class="goal-field">
+          <span class="goal-field__label">Target value</span>
+          <input type="number" formControlName="targetValue" min="1" step="1" />
+        </label>
+
+        <label class="goal-field">
+          <span class="goal-field__label">Unit</span>
+          <input type="text" formControlName="unit" placeholder="books" />
+        </label>
+
+        <label class="goal-field goal-field--wide">
+          <span class="goal-field__label">Motivation</span>
+          <textarea
+            formControlName="motivation"
+            rows="4"
+            placeholder="Build a steadier reading practice."
+          ></textarea>
+        </label>
+
+        <label class="goal-field goal-field--wide">
+          <span class="goal-field__label">Notes</span>
+          <textarea
+            formControlName="notes"
+            rows="4"
+            placeholder="Focus on long-form non-fiction and two novels each quarter."
+          ></textarea>
+        </label>
+      </div>
+
+      <div class="goal-form__actions">
+        <p class="goal-form__hint">
+          Milestory will preview a backend-generated checkpoint path before anything is saved.
+        </p>
+        <button type="submit" class="goal-button goal-button--primary">Continue to preview</button>
+      </div>
+    </form>
+  </section>
+</main>

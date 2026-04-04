@@ -1,0 +1,189 @@
+:host {
+  display: block;
+}
+
+.goal-page {
+  min-height: 100dvh;
+  padding: clamp(var(--space-xl), 6vw, 72px) clamp(var(--space-md), 4vw, var(--space-2xl))
+    var(--space-3xl);
+}
+
+.goal-shell {
+  display: grid;
+  gap: var(--space-xl);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.goal-shell__hero,
+.goal-card {
+  background: rgb(255 255 255 / 0.44);
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.goal-shell__hero {
+  padding: var(--space-2xl);
+}
+
+.goal-shell__eyebrow,
+.goal-summary__eyebrow {
+  margin: 0 0 var(--space-md);
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.goal-shell__summary,
+.goal-detail__facts,
+.goal-detail__archive-note {
+  color: var(--color-muted);
+  font-size: 16px;
+}
+
+.goal-shell__summary {
+  max-width: 44rem;
+  margin: var(--space-lg) 0 0;
+}
+
+.goal-detail {
+  padding: var(--space-xl);
+  background:
+    linear-gradient(180deg, rgb(230 221 207 / 0.92), rgb(246 241 231 / 0.94)),
+    var(--color-surface);
+}
+
+.goal-detail__header,
+.goal-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.goal-detail__flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.goal-pill {
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(95 85 76 / 0.12);
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.goal-pill--accent {
+  background: rgb(31 107 92 / 0.12);
+  color: var(--color-accent);
+}
+
+.goal-detail__facts {
+  display: grid;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.goal-detail__facts li {
+  padding: var(--space-md);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.55);
+}
+
+.goal-detail__archive-note {
+  margin-top: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  border-left: 3px solid var(--color-destructive);
+  background: rgb(182 71 53 / 0.08);
+}
+
+.goal-checkpoint-list {
+  display: grid;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.checkpoint-card {
+  padding: var(--space-lg);
+  border-radius: 24px;
+  background: rgb(255 255 255 / 0.62);
+  border: 1px solid rgb(31 107 92 / 0.08);
+}
+
+.checkpoint-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.checkpoint-card__label {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.checkpoint-card__grid {
+  display: grid;
+  gap: var(--space-sm);
+  color: var(--color-muted);
+}
+
+.goal-button {
+  min-height: 44px;
+  padding: 0 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.goal-button--ghost {
+  background: rgb(31 107 92 / 0.08);
+  color: var(--color-accent);
+}
+
+.goal-button--danger {
+  background: rgb(182 71 53 / 0.08);
+  color: var(--color-destructive);
+}
+
+@media (max-width: 720px) {
+  .goal-shell__hero,
+  .goal-detail {
+    padding: var(--space-lg);
+  }
+}
