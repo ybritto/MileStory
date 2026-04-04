@@ -1,0 +1,217 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-goal-planning-foundation
+      author: codex
+      changes:
+        - createTable:
+            tableName: goal_category
+            columns:
+              - column:
+                  name: category_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: key
+                  type: varchar(64)
+              - column:
+                  name: display_name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: system_defined
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: goal_category
+            columnNames: key
+            constraintName: uk_goal_category_key
+        - createTable:
+            tableName: goal
+            columns:
+              - column:
+                  name: goal_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: planning_year
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_value
+                  type: numeric(19,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: motivation
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notes
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: suggestion_basis
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customized_from_suggestion
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: archived_at
+                  type: timestamptz
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: goal
+            baseColumnNames: category_id
+            referencedTableName: goal_category
+            referencedColumnNames: category_id
+            constraintName: fk_goal_category
+        - createTable:
+            tableName: goal_checkpoint
+            columns:
+              - column:
+                  name: checkpoint_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: goal_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence_number
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: checkpoint_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_value
+                  type: numeric(19,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: text
+              - column:
+                  name: origin
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_checkpoint_date
+                  type: date
+              - column:
+                  name: original_target_value
+                  type: numeric(19,4)
+        - addForeignKeyConstraint:
+            baseTableName: goal_checkpoint
+            baseColumnNames: goal_id
+            referencedTableName: goal
+            referencedColumnNames: goal_id
+            constraintName: fk_goal_checkpoint_goal
+        - addUniqueConstraint:
+            tableName: goal_checkpoint
+            columnNames: goal_id, sequence_number
+            constraintName: uk_goal_checkpoint_sequence
+        - insert:
+            tableName: goal_category
+            columns:
+              - column: { name: category_id, value: "00000000-0000-0000-0000-000000000101" }
+              - column: { name: key, value: "financial" }
+              - column: { name: display_name, value: "Financial" }
+              - column: { name: system_defined, valueBoolean: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+        - insert:
+            tableName: goal_category
+            columns:
+              - column: { name: category_id, value: "00000000-0000-0000-0000-000000000102" }
+              - column: { name: key, value: "fitness" }
+              - column: { name: display_name, value: "Fitness" }
+              - column: { name: system_defined, valueBoolean: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+        - insert:
+            tableName: goal_category
+            columns:
+              - column: { name: category_id, value: "00000000-0000-0000-0000-000000000103" }
+              - column: { name: key, value: "reading" }
+              - column: { name: display_name, value: "Reading" }
+              - column: { name: system_defined, valueBoolean: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+        - insert:
+            tableName: goal_category
+            columns:
+              - column: { name: category_id, value: "00000000-0000-0000-0000-000000000104" }
+              - column: { name: key, value: "weight" }
+              - column: { name: display_name, value: "Weight" }
+              - column: { name: system_defined, valueBoolean: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+        - insert:
+            tableName: goal_category
+            columns:
+              - column: { name: category_id, value: "00000000-0000-0000-0000-000000000105" }
+              - column: { name: key, value: "custom" }
+              - column: { name: display_name, value: "Custom" }
+              - column: { name: system_defined, valueBoolean: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
