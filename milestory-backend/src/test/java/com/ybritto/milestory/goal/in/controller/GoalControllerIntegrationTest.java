@@ -123,6 +123,11 @@ class GoalControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("Read 24 books")))
                 .andExpect(jsonPath("$.status", is("ACTIVE")))
+                .andExpect(jsonPath("$.currentProgressValue", is(0.0)))
+                .andExpect(jsonPath("$.expectedProgressValueToday", is(6.2667)))
+                .andExpect(jsonPath("$.paceStatus", is("BEHIND")))
+                .andExpect(jsonPath("$.paceSummary",
+                        is("You're behind the pace you planned for today, but the year still has room to recover.")))
                 .andExpect(jsonPath("$.checkpoints", hasSize(12)))
                 .andExpect(jsonPath("$.plannedPathSummary", notNullValue()));
 
@@ -160,7 +165,9 @@ class GoalControllerIntegrationTest {
                         .content(createGoalRequestJson("Read 30 books", BigDecimal.valueOf(30))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Read 30 books")))
-                .andExpect(jsonPath("$.targetValue", is(30.0)));
+                .andExpect(jsonPath("$.targetValue", is(30.0)))
+                .andExpect(jsonPath("$.currentProgressValue", is(0.0)))
+                .andExpect(jsonPath("$.paceStatus", is("BEHIND")));
 
         mockMvc.perform(post("/api/v1/goals/{goalId}/archive", goalId))
                 .andExpect(status().isOk())

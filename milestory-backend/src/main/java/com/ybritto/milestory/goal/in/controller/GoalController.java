@@ -74,8 +74,9 @@ public class GoalController implements GoalCategoriesApi, GoalPlanningApi, Goals
 
     @Override
     public ResponseEntity<GoalResponse> createGoal(CreateGoalRequest body) {
+        var created = createGoalUseCase.create(goalRequestMapper.toCreateGoalCommand(body));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(goalResponseMapper.mapGoal(createGoalUseCase.create(goalRequestMapper.toCreateGoalCommand(body))));
+                .body(goalResponseMapper.mapGoal(getGoalDetailUseCase.getGoal(created.goalId())));
     }
 
     @Override
@@ -85,8 +86,9 @@ public class GoalController implements GoalCategoriesApi, GoalPlanningApi, Goals
 
     @Override
     public ResponseEntity<GoalResponse> updateGoal(String goalId, CreateGoalRequest body) {
+        var updated = updateGoalUseCase.update(goalRequestMapper.toUuid(goalId), goalRequestMapper.toUpdateGoalCommand(body));
         return ResponseEntity.ok(goalResponseMapper.mapGoal(
-                updateGoalUseCase.update(goalRequestMapper.toUuid(goalId), goalRequestMapper.toUpdateGoalCommand(body))
+                getGoalDetailUseCase.getGoal(updated.goalId())
         ));
     }
 
@@ -109,8 +111,9 @@ public class GoalController implements GoalCategoriesApi, GoalPlanningApi, Goals
 
     @Override
     public ResponseEntity<GoalResponse> restoreGoal(String goalId, RestoreGoalRequest body) {
+        var restored = restoreGoalUseCase.restore(goalRequestMapper.toUuid(goalId), goalRequestMapper.toRestoreGoalCommand(body));
         return ResponseEntity.ok(goalResponseMapper.mapGoal(
-                restoreGoalUseCase.restore(goalRequestMapper.toUuid(goalId), goalRequestMapper.toRestoreGoalCommand(body))
+                getGoalDetailUseCase.getGoal(restored.goalId())
         ));
     }
 }
